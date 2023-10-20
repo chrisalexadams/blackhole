@@ -4,18 +4,13 @@
 +$  versioned-state
   $%  state-0
   ==
-+$  state-0
-  $:  [%0 values=(list @)]
-  ==
++$  state-0  [%0 orderbook]
 +$  card  card:agent:gall
 --
 %-  agent:dbug
 =|  state-0
 =*  state  -
 ^-  agent:gall
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::  This agent is a FE to enter order info to be sent to %darkpool mock smart contract ::
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 |_  =bowl:gall
 +*  this     .
     default  ~(. (default-agent this %|) bowl)
@@ -30,23 +25,28 @@
   ^-  [(list card) _this]
   ?>  ?=(%blackhole-order mark)
   =/  ord  !<(order vase)
+  =/  id  (crip (oust [0 180] (trip (scot %ud eny.bowl))))
+  ~&  id
+  ::=/  target  ~bud
+  ::~&  target
   ?-    -.ord
       %buy
-    :-  ^-  (list card)
-        :~  [%pass /pokes %agent [target.ord %blackhole] %poke mark vase]
-        ==
-    this  
-  ::
-      %sell
-    :-  ^-  (list card)
-        :~  [%pass /pokes %agent [target.ord %blackhole] %poke mark vase]
+    =/  id  `@ux`eny.bowl    ::  generate here?
+    ~&  id
+    =/  target  ~bud
+    ~&  target
+    ~&  target.ord
+    ~&  ord
+        :-  ^-  (list card)
+        :~  [%pass /pokes %agent [target.ord %darkpool3] %poke mark !>(ord)]
         ==
     this
   ::
-      %cancel
-    :-
-    :~  [%pass /pokes %agent [target.ord %blackhole] %poke mark vase]
-    ==
+      %sell
+    ~&  ord  
+        :-  ^-  (list card)
+        :~  [%pass /pokes %agent [target.ord %darkpool3] %poke mark !>(ord)]
+        ==
     this
 ==
 ::

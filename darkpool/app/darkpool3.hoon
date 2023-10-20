@@ -5,7 +5,7 @@
   $%  state-0
   ==
 +$  state-0
-  $:  [%0 orderbook values=(list @)]
+  $:  [%0 orderbook]
   ==
 +$  card  card:agent:gall
 --
@@ -31,26 +31,51 @@
 ++  on-poke
   |=  [=mark =vase]
   |^  ^-  [(list card) _this]  
-  ?>  ?=(%blackhole-order mark)
-  =/  ord  !<(order vase)
-  ?-    -.ord
-      %buy
-    ?:  =(our.bowl target.ord)
-    ::=/  id  `@ux`eny.bowl
-    ~&  ord
-    ::~&  id
-      =.  buys  (~(put by buys) id.ord ord)
-      `this(values [price.ord values])
-    !!
-    ::
-      %sell
-    ?:  =(our.bowl target.ord)
-    ~&  ord
-      =.  sells  (~(put by sells) id.ord ord)
-      `this(values [price.ord values])
-    !!
+  =^  cards  this
+    ?+  mark  (on-poke:default mark vase)
+      %blackhole-order  (book !<(order vase))
+      %blackhole-order  (match !<(order vase))
     ==
---
+  [cards this]
+  ::  This arm takes in the order(s) from %blackhole and create a map with id as the key
+  ++  book
+      |=  ord=order
+      ^-  [(list card) _this]
+      ?-    -.ord
+          %buy
+      ?:  =(our.bowl target.ord)
+      =/  id  `@ux`eny.bowl
+      ~&  ord
+      ~&  id
+      ~&  orderbook
+      =.  buys  (~(put by buys) id.ord ord)
+        `this
+      !!
+    ::
+          %sell
+      ?:  =(our.bowl target.ord)
+      ~&  ord
+      =.  sells  (~(put by sells) id.ord ord)
+        `this
+      !!
+  ==
+  ::  This arm is to match opposing orders in the map with the same price
+  ::  TODO Not working correctly   
+  ++  match 
+      |=  orderbook
+      ^-  (unit match)
+      =/  first-buy  (snag 0 buys)
+      ~&  first-buy
+      |-  ^-  (unit match)
+      ?:  =(~ i.sells)
+        ~
+      =/  curr-sell  i.sells
+      ~&  i.sells
+      ?:  =(price.first-buy price.curr-sell)
+        %-  some
+            [id.first-buy id.curr-sell]
+        $(sells t.sells)
+  --
 ::
 ++  on-peek  on-peek:default
 ++  on-arvo  on-arvo:default
