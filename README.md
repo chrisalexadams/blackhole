@@ -57,10 +57,10 @@ A trader wants to submit a larger order to a darkpool without revealing incomple
 
 ### `%darkpool` Agent
 
-1. Boot a fake ship `~dev`
+1. Boot a fake ship `~bud`
 
    ```cli
-   ./urbit -F dev
+   ./urbit -F bud
    ```
 
 2. Create a `%darkpool` desk in the dojo
@@ -87,6 +87,19 @@ A trader wants to submit a larger order to a darkpool without revealing incomple
 * [Urbit Developer Environment Setup](https://developers.urbit.org/guides/core/environment)
 
 ---
+
+## CLI
+
+To send an order from `%blackhole` to the `%darkpool` agent in the dojo, with this format:
+
+`[%buy/%sell id target ticker quantity price]`
+
+```sh
+> :blackhole &blackhole-order [%sell 4 ~bud 'ZORP' 71 3]
+```
+
+---
+
 
 ## UI 👓
 

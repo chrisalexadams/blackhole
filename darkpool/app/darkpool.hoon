@@ -5,7 +5,7 @@
   $%  state-0
   ==
 +$  state-0
-  $:  [%0 orderbook values=(list @)]
+  $:  [%0 orderbook]
   ==
 +$  card  card:agent:gall
 --
@@ -27,32 +27,37 @@
 ++  on-load
   |=  old=vase
   ^-  [(list card) _this]
-  [~ this(state !<(state-0 old))]
+  [~ this(state !<(state-0 old))]  
 ++  on-poke
   |=  [=mark =vase]
   |^  ^-  [(list card) _this]  
-  ?>  ?=(%blackhole-order mark)
-  =/  ord  !<(order vase)
-  ?-    -.ord
-      %buy
-    ?:  =(our.bowl target.ord)
-    ::=/  id  `@ux`eny.bowl
-    ~&  ord
-    ::~&  id
-      =.  buys  (~(put by buys) id.ord ord)
-      `this(values [price.ord values])
-    !!
-    ::
-      %sell
-    ?:  =(our.bowl target.ord)
-    ~&  ord
-      =.  sells  (~(put by sells) id.ord ord)
-      `this(values [price.ord values])
-    !!
+  =^  cards  this
+    ?+  mark  (on-poke:default mark vase)
+      %blackhole-order  (book !<(order vase))
+      ::%blackhole2-order  (cross !<(order vase))
     ==
---
-::
-++  on-peek  on-peek:default
+  [cards this]
+  ::  This arm takes in the order(s) from %blackhole and create a map of orders with the id as the key
+  ++  book
+    |=  ord=order
+    ^-  [(list card) _this]
+    ?-    -.ord
+        %buy
+      ~&  ord
+      =.  buys  (~(put by buys) id.ord ord)
+      `this
+    ::
+        %sell
+      ~&  ord  
+      =.  sells  (~(put by sells) id.ord ord)
+      `this
+    ==
+  ::  How do I call this arm from the ++book arm? This is where matching logic will do, for now it's pseudo-code
+  ++  cross
+    |=  a=@
+      +(a)
+--      
+++  on-peek  on-peek:default  
 ++  on-arvo  on-arvo:default
 ++  on-watch  on-watch:default
 ++  on-leave  on-leave:default

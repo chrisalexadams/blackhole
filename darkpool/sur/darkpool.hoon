@@ -8,7 +8,7 @@
   $%  [%buy =id =target =ticker =quantity =price]
       [%sell =id =target =ticker =quantity =price]
   ==
-+$  orders    (map =id =order) 
+::+$  orders    (map =id =order) 
 ::  
 +$  orderbook  
   [=buys =sells]
@@ -18,5 +18,5 @@
   (map id $>(%buy order))  
 +$  sells  
   $+  sells
-  (map id $>(%sell order)) 
+  (map id $>(%sell order))   
 --
